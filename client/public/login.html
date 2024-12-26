@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(8px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 150px auto 0;
+            padding: 0 20px;
+        }
+
+        #loginForm {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        #loginForm h2 {
+            color: rgb(211, 147, 202);
+            font-size: 2rem;
+            margin: 0 0 30px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgb(231, 167, 222);
+            background: #444;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            color: white;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        .form-footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .form-footer a {
+            color: rgb(211, 147, 202);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background: #333;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin-top: 120px;
+            }
+
+            #loginForm {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options" id="headerOptions">
+            
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="login-container">
+        <form id="loginForm">
+            <h2>Login</h2>
+            
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit">Login</button>
+
+            <div class="form-footer">
+                <p>Don't have an account? <a href="register.html">Register here</a></p>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ArtistryHub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    // Redirect based on role
+                    switch(data.user.role) {
+                        case 'admin':
+                            window.location.href = 'admin-dashboard.html';
+                            break;
+                        case 'artist':
+                            window.location.href = 'artist-dashboard.html';
+                            break;
+                        default:
+                            window.location.href = 'index.html';
+                    }
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message || 'Login failed. Please try again.');
+            }
+        });
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>

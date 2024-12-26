@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Upload Art - ArtistryHub</title>
+   <link rel="stylesheet" href="header.css">
+   <style>
+       body {
+           font-family: Arial, sans-serif;
+           margin: 0;
+           padding: 0;
+           color: white;
+       }
+
+       .bg-image {
+           background-image: url("backImg.jpg");
+           background-size: cover;
+           background-attachment: fixed;
+           filter: blur(8px);
+           position: fixed;
+           inset: 0;
+           z-index: -1;
+       }
+
+       .overlay {
+           position: fixed;
+           inset: 0;
+           background: rgba(0, 0, 0, 0.5);
+           z-index: -1;
+       }
+
+       .upload-container {
+           margin-top: 200px;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           padding: 0 20px;
+       }
+
+       #upload-form {
+           background: rgba(0, 0, 0, 0.8);
+           padding: 30px;
+           border-radius: 10px;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+           max-width: 500px;
+           width: 100%;
+       }
+
+       .form-group {
+           margin-bottom: 20px;
+       }
+
+       .form-group label {
+           display: block;
+           margin-bottom: 8px;
+           color: rgb(211, 147, 202);
+           font-weight: 500;
+       }
+
+       .form-group input,
+       .form-group select,
+       .form-group textarea {
+           width: 100%;
+           padding: 10px;
+           background: #333;
+           border: 1px solid rgb(211, 147, 202);
+           border-radius: 4px;
+           color: white;
+           font-size: 16px;
+       }
+
+       .form-group input:focus,
+       .form-group select:focus,
+       .form-group textarea:focus {
+           outline: none;
+           border-color: rgb(231, 167, 222);
+       }
+
+       #art-image {
+           cursor: pointer;
+           padding: 8px;
+       }
+
+       #image-preview {
+           max-width: 100%;
+           max-height: 300px;
+           border-radius: 8px;
+           margin-top: 15px;
+           display: none;
+       }
+
+       button[type="submit"] {
+           width: 100%;
+           padding: 12px;
+           background: #333;
+           color: white;
+           border: 1px solid rgb(211, 147, 202);
+           border-radius: 4px;
+           font-size: 16px;
+           cursor: pointer;
+           transition: all 0.3s;
+       }
+
+       button[type="submit"]:hover {
+           background: #444;
+           transform: translateY(-2px);
+       }
+
+       footer {
+           background: #333;
+           text-align: center;
+           padding: 20px;
+           position: fixed;
+           bottom: 0;
+           width: 100%;
+       }
+
+       @media (max-width: 600px) {
+           #upload-form {
+               padding: 20px;
+           }
+       }
+   </style>
+</head>
+<body>
+   <!-- Header -->
+   <header class="header-nav">
+       <div class="logo-section">
+           <img src="logo.png" alt="ArtistryHub Logo">
+       </div>
+
+       <nav>
+           <ul>
+               <li><a href="index.html">Home</a></li>
+               <li><a href="browse.html">Browse</a></li>
+               <li><a href="upload.html">Upload</a></li>
+               <li><a href="about.html">About Us</a></li>
+               <li><a href="contact.html">Contact Us</a></li>
+           </ul>
+       </nav>
+
+       <div class="header-options" id="headerOptions">
+           <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+           <a href="register.html">Register</a>
+           <a href="login.html">Login</a>
+       </div>
+   </header>
+
+   <div class="bg-image"></div>
+   <div class="overlay"></div>
+
+   <div class="upload-container">
+       <h2>Upload Your Art</h2>
+       <form id="upload-form" enctype="multipart/form-data">
+           <div class="form-group">
+               <label for="art-title">Title:</label>
+               <input type="text" id="art-title" name="title" required>
+           </div>
+
+           <div class="form-group">
+               <label for="art-type">Type:</label>
+               <select id="art-type" name="type" required>
+                   <option value="">Select Type</option>
+                   <option value="Canvas Painting">Canvas Painting</option>
+                   <option value="Water Painting">Water Painting</option>
+                   <option value="Knife Painting">Knife Painting</option>
+                   <option value="Portrait">Portrait</option>
+               </select>
+           </div>
+
+           <div class="form-group">
+               <label for="art-description">Description:</label>
+               <textarea id="art-description" name="description" rows="4" required></textarea>
+           </div>
+
+           <div class="form-group">
+               <label for="art-price">Price (₹):</label>
+               <input type="number" id="art-price" name="price" min="0" step="0.01" required>
+           </div>
+
+           <div class="form-group">
+               <label for="art-image">Upload Image:</label>
+               <input type="file" id="art-image" name="image" accept="image/*" required>
+               <img id="image-preview" alt="Image Preview">
+           </div>
+
+           <button type="submit">Upload Art</button>
+       </form>
+   </div>
+
+   <script>
+       document.getElementById('art-image').addEventListener('change', function(event) {
+           const file = event.target.files[0];
+           if (file) {
+               const reader = new FileReader();
+               reader.onload = function(e) {
+                   const preview = document.getElementById('image-preview');
+                   preview.src = e.target.result;
+                   preview.style.display = 'block';
+               };
+               reader.readAsDataURL(file);
+           }
+       });
+
+       document.getElementById('upload-form').addEventListener('submit', async function(event) {
+           event.preventDefault();
+           
+           // Check if user is logged in
+           const token = localStorage.getItem('token');
+           if (!token) {
+               alert('Please login to upload artwork');
+               window.location.href = 'login.html';
+               return;
+           }
+
+           const formData = new FormData();
+           
+           // Get file and form data
+           const imageFile = document.getElementById('art-image').files[0];
+           const title = document.getElementById('art-title').value;
+           const type = document.getElementById('art-type').value;
+           const description = document.getElementById('art-description').value;
+           const price = document.getElementById('art-price').value;
+
+           // Log form data for debugging
+           console.log('Form Data:', {
+               title,
+               type,
+               description,
+               price,
+               imageFile
+           });
+
+           // Validate file
+           if (!imageFile) {
+               alert('Please select an image file');
+               return;
+           }
+
+           // Append data to FormData
+           formData.append('image', imageFile);
+           formData.append('title', title);
+           formData.append('type', type);
+           formData.append('description', description);
+           formData.append('price', price);
+
+           try {
+               const response = await fetch('http://localhost:3000/api/art/upload', {
+                   method: 'POST',
+                   headers: {
+                       'Authorization': `Bearer ${token}`
+                   },
+                   body: formData
+               });
+
+               const data = await response.json();
+               
+               if (response.ok) {
+                   alert('Artwork uploaded successfully! Pending admin approval.');
+                   window.location.href = 'artist-dashboard.html';
+               } else {
+                   throw new Error(data.message || 'Upload failed');
+               }
+           } catch (error) {
+               console.error('Upload error:', error);
+               alert(error.message || 'Error uploading artwork');
+           }
+       });
+   </script>
+   <script src="auth.js"></script>
+</body>
+</html>

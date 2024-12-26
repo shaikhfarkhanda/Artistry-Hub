@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(8px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .bill-container {
+            max-width: 800px;
+            margin: 120px auto 20px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .bill-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+
+        .bill-header h2 {
+            color: rgb(211, 147, 202);
+            margin: 0 0 10px;
+        }
+
+        .bill-items {
+            margin: 20px 0;
+        }
+
+        .bill-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 20px;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bill-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .item-details h3 {
+            margin: 0 0 10px;
+            color: rgb(211, 147, 202);
+        }
+
+        .bill-total {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 1.1em;
+        }
+
+        .bill-total p {
+            margin: 10px 0;
+        }
+
+        .bill-total strong {
+            color: rgb(211, 147, 202);
+        }
+
+        .print-btn {
+            display: block;
+            width: fit-content;
+            margin: 20px auto 0;
+            padding: 12px 30px;
+            background: #333;
+            color: white;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .print-btn:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            .bg-image, .overlay, header, .print-btn {
+                display: none;
+            }
+
+            .bill-container {
+                margin: 0;
+                padding: 20px;
+                box-shadow: none;
+                color: black;
+                background: white;
+            }
+
+            .bill-header h2 {
+                color: black;
+            }
+
+            .item-details h3 {
+                color: black;
+            }
+
+            .bill-total strong {
+                color: black;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .bill-container {
+                margin: 120px 20px 20px;
+                padding: 20px;
+            }
+
+            .bill-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .bill-item img {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options" id="headerOptions">
+           
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="bill-container">
+        <div class="bill-header">
+            <h2>Purchase Bill</h2>
+            <p>Date: <span id="billDate"></span></p>
+            <p>Order ID: <span id="orderId"></span></p>
+        </div>
+
+        <div class="bill-items" id="billItems">
+            <!-- Bill items will be loaded here -->
+        </div>
+
+        <div class="bill-total">
+            <p>Subtotal: ₹<span id="subtotal">0.00</span></p>
+            <p>Tax (18%): ₹<span id="tax">0.00</span></p>
+            <p><strong>Total: ₹<span id="total">0.00</span></strong></p>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">Print Bill</button>
+    </div>
+
+    <script>
+        // bill-view.html script
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadBill();
+        });
+
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+
+            if (!user || !token) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        async function loadBill() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const orderId = urlParams.get('orderId');
+
+                if (!orderId) {
+                    alert('No order ID provided');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                const response = await fetch(`http://localhost:3000/api/orders/bill/${orderId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    displayBill(data.bill);
+                } else {
+                    throw new Error(data.message || 'Failed to load bill');
+                }
+            } catch (error) {
+                console.error('Error loading bill:', error);
+                alert('Error loading bill details');
+            }
+        }
+
+        function displayBill(bill) {
+            document.getElementById('billDate').textContent = new Date(bill.order_date).toLocaleDateString();
+            document.getElementById('orderId').textContent = bill.order_id;
+
+            const itemsContainer = document.getElementById('billItems');
+            itemsContainer.innerHTML = bill.items.map(item => `
+                <div class="bill-item">
+                    <img src="${item.image_url}" alt="${item.title}">
+                    <div class="item-details">
+                        <h3>${item.title}</h3>
+                        <p>Price: ₹${item.price.toFixed(2)} × ${item.quantity}</p>
+                    </div>
+                    <div>₹${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            const subtotal = bill.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shippingCost = bill.shipping_cost || 100;
+            const total = subtotal + shippingCost;
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('shipping').textContent = shippingCost.toFixed(2);
+            document.getElementById('total').textContent = total.toFixed(2);
+        }
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>

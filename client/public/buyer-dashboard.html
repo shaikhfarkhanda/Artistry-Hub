@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(5px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .dashboard-container {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .profile-header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .nav-tabs button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-tabs button.active {
+            background-color: #333;
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .order-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .profile-form input,
+        .profile-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+        }
+
+        .update-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section with Navigation -->
+    <header class="header-nav">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <!-- Header Options -->
+        <div class="header-options" id="headerOptions">
+            
+            <button id="searchButton">Search</button>
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="dashboard-container">
+        <div class="profile-header">
+            <h2 id="userName">Welcome</h2>
+            <p id="userEmail"></p>
+        </div>
+
+        <div class="nav-tabs">
+            <button onclick="showTab('orders')" class="active">My Orders</button>
+            <button onclick="showTab('profile')">Profile</button>
+            <button onclick="showTab('settings')">Settings</button>
+        </div>
+
+        <div id="ordersTab" class="tab-content active">
+            <h3>My Orders</h3>
+            <div id="ordersList">
+                <!-- Orders will be loaded here -->
+            </div>
+        </div>
+        <div class="filter-section">
+            <input type="text" id="searchInput" placeholder="Search artworks...">
+            <select id="typeSelect">
+                <option value="">All Types</option>
+                <option value="Canvas Painting">Canvas Painting</option>
+                <option value="Water Painting">Water Painting</option>
+                <option value="Knife Painting">Knife Painting</option>
+                <option value="Portrait">Portrait</option>
+            </select>
+            <select id="priceRange">
+                <option value="">All Prices</option>
+                <option value="0-1000">Under ₹1000</option>
+                <option value="1000-5000">₹1000 - ₹5000</option>
+                <option value="5000-10000">₹5000 - ₹10000</option>
+                <option value="10000">Above ₹10000</option>
+            </select>
+        </div>
+
+        <div id="profileTab" class="tab-content">
+            <h3>My Profile</h3>
+            <div class="profile-form">
+                <input type="text" id="fullName" placeholder="Full Name">
+                <input type="email" id="email" readonly>
+                <textarea id="address" placeholder="Delivery Address"></textarea>
+                <input type="tel" id="phone" placeholder="Contact Number">
+                <button class="update-btn" onclick="updateProfile()">Update Profile</button>
+            </div>
+        </div>
+
+        <div id="settingsTab" class="tab-content">
+            <h3>Settings</h3>
+            <!-- Add settings options here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+
+            if (!user || !token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update user info
+            document.getElementById('userName').textContent = `Welcome, ${user.username}`;
+            document.getElementById('userEmail').textContent = user.email;
+
+            // Load orders
+            try {
+                const response = await fetch('http://localhost:3000/api/orders/my-orders', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+
+                const ordersList = document.getElementById('ordersList');
+                if (data.success && data.orders.length > 0) {
+                    ordersList.innerHTML = data.orders.map(order => `
+                        <div class="order-card">
+                            <img src="${order.image_url}" alt="${order.title}">
+                            <div class="order-details">
+                                <h4>${order.title}</h4>
+                                <p>Order Date: ${new Date(order.order_date).toLocaleDateString()}</p>
+                                <p>Total Price: ₹${order.total_price}</p>
+                                <p>Quantity: ${order.quantity}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    ordersList.innerHTML = '<p>No orders found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('ordersList').innerHTML = '<p>Error loading orders</p>';
+            }
+
+            // Load profile data
+            try {
+                const profileResponse = await fetch('http://localhost:3000/api/user/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const profileData = await profileResponse.json();
+
+                if (profileData.success) {
+                    document.getElementById('fullName').value = profileData.user.username || '';
+                    document.getElementById('email').value = profileData.user.email || '';
+                    document.getElementById('address').value = profileData.user.address || '';
+                    document.getElementById('phone').value = profileData.user.phone || '';
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        });
+        function initializeDashboard() {
+            loadUserOrders();
+            loadUserProfile();
+            initializeFilters();
+        }
+
+        async function loadUserOrders() {
+            try {
+                const response = await fetch('http://localhost:3000/api/orders/my-orders', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const data = await response.json();
+                
+                const ordersContainer = document.getElementById('ordersList');
+                ordersContainer.innerHTML = data.orders.map(order => `
+                    <div class="order-card">
+                        <img src="${order.image_url}" alt="${order.title}">
+                        <div class="order-details">
+                            <h4>${order.title}</h4>
+                            <p>Order Date: ${new Date(order.order_date).toLocaleDateString()}</p>
+                            <p>Price: ₹${order.total_price}</p>
+                            <p>Status: ${order.status}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading orders:', error);
+            }
+        }
+
+        function initializeFilters() {
+            const priceRange = document.getElementById('priceRange');
+            const typeSelect = document.getElementById('typeSelect');
+            const searchInput = document.getElementById('searchInput');
+
+            const applyFilters = debounce(() => {
+                const filters = {
+                    priceRange: priceRange.value,
+                    type: typeSelect.value,
+                    search: searchInput.value
+                };
+                fetchFilteredArtworks(filters);
+            }, 300);
+
+            priceRange.addEventListener('change', applyFilters);
+            typeSelect.addEventListener('change', applyFilters);
+            searchInput.addEventListener('input', applyFilters);
+        }
+
+        async function fetchFilteredArtworks(filters) {
+            try {
+                const queryParams = new URLSearchParams(filters);
+                const response = await fetch(`http://localhost:3000/api/art/artworks?${queryParams}`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const data = await response.json();
+                updateArtworkDisplay(data.artworks);
+            } catch (error) {
+                console.error('Error fetching filtered artworks:', error);
+            }
+        }
+
+        function updateArtworkDisplay(artworks) {
+            const container = document.getElementById('artworksContainer');
+            container.innerHTML = artworks.map(artwork => `
+                <div class="artwork-card">
+                    <img src="${artwork.image_url}" alt="${artwork.title}">
+                    <h3>${artwork.title}</h3>
+                    <p>${artwork.description}</p>
+                    <p>Price: ₹${artwork.price}</p>
+                    <button onclick="addToCart(${artwork.artwork_id})">Add to Cart</button>
+                </div>
+            `).join('');
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(8px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .page-content {
+            margin-top: 120px;
+        }
+
+        .about-us {
+            max-width: 1250px;
+            margin: 150px auto 0;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 0 60px 40px;
+            padding: 40px;
+        }
+
+        .section:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .section h2 {
+            width: 40%;
+            color: rgb(211, 147, 202);
+            font-size: 1.5rem;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .section p {
+            width: 80%;
+            color: #ddd;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 0;
+            font-family: Georgia, serif;
+            font-style: italic;
+        }
+
+        .team {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .team-member {
+            width: 250px;
+            text-align: center;
+            color: rgb(211, 147, 202);
+        }
+
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                flex-direction: column;
+                margin: 0 20px;
+                padding: 20px;
+            }
+
+            .section:nth-child(even) {
+                flex-direction: column;
+            }
+
+            .section h2,
+            .section p {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .team {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options" id="headerOptions">
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <!-- About Content -->
+    <div class="about-us">
+        <div class="section">
+            <h2>About ArtistryHub</h2>
+            <p>Welcome to ArtistryHub, a vibrant platform dedicated to showcasing diverse and unique art from talented artists around the world.</p>
+        </div>
+
+        <div class="section">
+            <h2>Our Story</h2>
+            <p>ArtistryHub was founded with a vision to bridge the gap between artists and art lovers by offering a platform where creativity meets opportunity.</p>
+        </div>
+
+        <div class="section">
+            <h2>Meet Our Team</h2>
+            <div class="team">
+                <div class="team-member">
+                    <img src="farkh.jpeg" alt="Farkhanda">
+                    <h3>Farkhanda</h3>
+                    <p>Co-founder and Head Curator</p>
+                </div>
+                <div class="team-member">
+                    <img src="palvi.jpg" alt="Palvi">
+                    <h3>Palvi</h3>
+                    <p>Co-founder and Art Director</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Our Vision & Mission</h2>
+            <p>To make art accessible to everyone while supporting artists and promoting the love of art in all its forms.</p>
+        </div>
+
+        <div class="section">
+            <h2>Our Goals</h2>
+            <p>
+                - Provide a platform for emerging and established artists.<br>
+                - Celebrate diversity through various art forms and styles.<br>
+                - Encourage art appreciation and community engagement.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>What Our Artists Say</h2>
+            <p>"ArtistryHub has provided me with an incredible platform to share my art with a global audience!"</p>
+        </div>
+
+        <div class="section">
+            <h2>Contact Us</h2>
+            <p>Have questions? Contact us at <a href="mailto:contact@artistryhub.com">contact@artistryhub.com</a> or visit our Contact Us page.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 ArtistryHub. All rights reserved.
+    </footer>
+
+    <script src="auth.js"></script>
+</body>
+</html>

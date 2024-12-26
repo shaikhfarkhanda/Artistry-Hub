@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(8px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .page-content {
+            margin-top: 150px;
+        }
+
+        h1 {
+            text-align: center;
+            color: rgb(211, 147, 202);
+            margin-bottom: 30px;
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .cart-details {
+            flex: 1;
+            margin: 0 20px;
+        }
+
+        .cart-details h4 {
+            margin: 0 0 10px;
+            color: rgb(211, 147, 202);
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-control input {
+            width: 60px;
+            padding: 5px;
+            background: #333;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            color: white;
+            text-align: center;
+        }
+
+        .remove-btn {
+            padding: 8px 15px;
+            background: #333;
+            color: white;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #444;
+        }
+
+        .cart-summary {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .total-price {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .checkout-button {
+            padding: 12px 30px;
+            background: #333;
+            color: white;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .checkout-button:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .empty-cart p {
+            margin-bottom: 20px;
+        }
+
+        .empty-cart a {
+            color: rgb(211, 147, 202);
+            text-decoration: none;
+        }
+
+        .empty-cart a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background: #333;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .cart-container {
+                margin: 0 20px;
+                padding: 20px;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cart-details {
+                margin: 15px 0;
+            }
+
+            .quantity-control {
+                justify-content: center;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Content -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options" id="headerOptions">
+          
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="page-content">
+        <h1>Your Cart</h1>
+        <div class="cart-container" id="cartContainer">
+            <!-- Cart items will be loaded here -->
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ArtistryHub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user'));
+            
+            if (!token || !user) {
+                const cartContainer = document.getElementById("cartContainer");
+                cartContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <p>Please login to view your cart</p>
+                        <a href="login.html">Login</a>
+                    </div>`;
+                return false;
+            }
+            return true;
+        }
+
+        // Load cart items
+        async function loadCartItems() {
+            if (!checkAuth()) return;
+
+            try {
+                const cart = JSON.parse(localStorage.getItem("cart")) || [];
+                const cartContainer = document.getElementById("cartContainer");
+                
+                if (cart.length === 0) {
+                    cartContainer.innerHTML = `
+                        <div class="empty-cart">
+                            <p>Your cart is empty</p>
+                            <a href="browse.html">Continue Shopping</a>
+                        </div>`;
+                    return;
+                }
+
+                let cartHTML = '';
+                let totalPrice = 0;
+
+                cart.forEach(item => {
+                    const itemPrice = Number(item.price) || 0;
+                    const itemTotal = itemPrice * item.quantity; 
+                    totalPrice += itemTotal;
+
+                    const imageUrl = item.image_url.startsWith('http') 
+                        ? item.image_url 
+                        : `http://localhost:3000${item.image_url}`;
+
+                    cartHTML += `
+                        <div class="cart-item">
+                            <img src="${imageUrl}" alt="${item.title}">
+                            <div class="cart-details">
+                                <h4>${item.title}</h4>
+                                <p>Price: ₹${itemPrice.toFixed(2)}</p>
+                                <div class="quantity-control">
+                                    <span>Quantity:</span>
+                                    <input type="number" value="${item.quantity}" 
+                                           min="1" onchange="updateQuantity(${item.artwork_id}, this.value)">
+                                </div>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${item.artwork_id})">Remove</button>
+                        </div>`;
+                });
+
+                cartHTML += `
+                    <div class="cart-summary">
+                        <p class="total-price">Total Price: ₹${totalPrice.toFixed(2)}</p>
+                        <button class="checkout-button" onclick="proceedToCheckout()">
+                            Proceed to Checkout
+                        </button>
+                    </div>`;
+
+                cartContainer.innerHTML = cartHTML;
+            } catch (error) {
+                console.error('Error:', error);
+                cartContainer.innerHTML = '<p>Error loading cart items</p>';
+            }
+        }
+
+        // Update quantity
+        function updateQuantity(artworkId, quantity) {
+            if (!checkAuth()) return;
+
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const updatedCart = cart.map(item => {
+                if (item.artwork_id === artworkId) {
+                    item.quantity = parseInt(quantity);
+                }
+                return item;
+            });
+
+            localStorage.setItem("cart", JSON.stringify(updatedCart));
+            loadCartItems();
+        }
+
+        // Remove from cart
+        function removeFromCart(artworkId) {
+            if (!checkAuth()) return;
+
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const updatedCart = cart.filter(item => item.artwork_id !== artworkId);
+            
+            localStorage.setItem("cart", JSON.stringify(updatedCart));
+            loadCartItems();
+        }
+
+        // Proceed to checkout
+        function proceedToCheckout() {
+            if (!checkAuth()) return;
+
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            if (cart.length === 0) {
+                alert("Your cart is empty. Add items before checkout!");
+                return;
+            }
+            
+            window.location.href = "checkout.html";
+        }
+
+        // Initialize cart on page load
+        document.addEventListener("DOMContentLoaded", loadCartItems);
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>

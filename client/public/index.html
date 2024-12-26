@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtistryHub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options" id="headerOptions">
+            
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <!-- Hero Section with Slideshow -->
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <div class="numbertext">1 / 3</div>
+            <img src="img1.jpg" style="width:100%; height:600px; object-fit:cover;">
+            <div class="text">Portrait</div>
+        </div>
+
+        <div class="mySlides fade">
+            <div class="numbertext">2 / 3</div>
+            <img src="img2.jpg" style="width:100%; height:600px; object-fit:cover;">
+            <div class="text">Canvas Painting</div>
+        </div>
+
+        <div class="mySlides fade">
+            <div class="numbertext">3 / 3</div>
+            <img src="img3.jpg" style="width:100%; height:600px; object-fit:cover;">
+            <div class="text">Water Painting</div>
+        </div>
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <!-- Slideshow Navigation Dots -->
+    <div style="text-align:center">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+
+    <!-- Featured Artists Section -->
+    <section class="featured-artists">
+        <h2>Meet Our Artists</h2>
+        <div class="artist-cards">
+            <div class="card">
+                <img src="card1.jpg" alt="Artist">
+                <h3>John Doe</h3>
+                <p>Specializes in abstract art and contemporary styles.</p>
+            </div>
+            <div class="card">
+                <img src="card2.jpg" alt="Artist">
+                <h3>Roksolona Hecuba</h3>
+                <p>Known for vibrant portraits and landscapes.</p>
+            </div>
+            <div class="card">
+                <img src="card3.jpg" alt="Artist">
+                <h3>Galal Haamid</h3>
+                <p>Expert in watercolor and minimalist art.</p>
+            </div>
+            <div class="card">
+                <img src="card4.jpg" alt="Artist">
+                <h3>Raoul Fred</h3>
+                <p>Specializes in portraits.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Artworks Section -->
+    <section class="featured-artworks">
+        <h2>Featured Artworks</h2>
+        <div class="artwork-carousel">
+            <div class="artwork-card">
+                <img src="img1.jpg" alt="Portrait" style="height:200px; width:300px;">
+                <h3>Portrait</h3>
+                <p>by Raoul Fred</p>
+                <p>Price: ₹1200</p>
+            </div>
+            <div class="artwork-card">
+                <img src="img2.jpg" alt="Canvas Painting" style="height:200px; width:300px;">
+                <h3>Canvas Painting</h3>
+                <p>by John Doe</p>
+                <p>Price: ₹1130</p>
+            </div>
+            <div class="artwork-card">
+                <img src="img3.jpg" alt="Water Painting" style="height:200px; width:300px;">
+                <h3>Water Painting</h3>
+                <p>by Galal Haamid</p>
+                <p>Price: ₹3135</p>
+            </div>
+            <div class="artwork-card">
+                <img src="img4.jpg" alt="Knife Painting" style="height:200px; width:300px;">
+                <h3>Knife Painting</h3>
+                <p>by Roksolona Hecuba</p>
+                <p>Price: ₹2145</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <h2>What Our Customers Say</h2>
+        <div class="testimonial-card">
+            <p>"Beautiful artworks, and the platform is easy to use!"</p>
+            <p>-Bailey Fowler</p>
+        </div>
+        <div class="testimonial-card">
+            <p>"Easy to purchase, sell and browse!"</p>
+            <p>-Leandro Joseph</p>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events">
+        <h2>Upcoming Events</h2>
+        <div class="event-card">
+            <h3>Art Workshop</h3>
+            <p>Date: December 25, 2024</p>
+            <p>Description: Join us for a beginner's workshop in watercolor painting.</p>
+        </div>
+    </section>
+
+    <!-- Artist of the Month Section -->
+    <section class="artist-of-month">
+        <h2>Artist of the Month</h2>
+        <div class="artist-profile">
+            <img src="card3.jpg" alt="Artist of the Month">
+            <h3>Galal Hamid</h3>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-signup">
+        <h2>Stay Updated</h2>
+        <p>Subscribe to our newsletter for the latest art updates.</p>
+        <form>
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 ArtistryHub. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(8px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .checkout-container {
+            max-width: 1000px;
+            margin: 150px auto 50px;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: rgb(211, 147, 202);
+            margin-bottom: 30px;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .checkout-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h3 {
+            margin: 0 0 10px;
+            color: rgb(211, 147, 202);
+        }
+
+        /* Bill Summary */
+        .bill-summary {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bill-row.total {
+            border: none;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Payment Methods */
+        .payment-section {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .payment-section h2 {
+            color: rgb(211, 147, 202);
+            margin: 0 0 20px;
+            text-align: center;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .payment-method {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .payment-method:hover {
+            border-color: rgb(211, 147, 202);
+            transform: translateY(-2px);
+        }
+
+        .payment-method img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* Payment Modal */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-content h3 {
+            color: rgb(211, 147, 202);
+            margin: 0 0 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgb(211, 147, 202);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            color: white;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            color: white;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .confirm-btn:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #333;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options" id="headerOptions">
+           
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="checkout-container">
+        <h1>Checkout</h1>
+
+        <!-- Order Summary -->
+        <div class="order-summary" id="orderSummary">
+            <!-- Order items will be loaded here -->
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-section">
+            <h2>Select Payment Method</h2>
+            <div class="payment-methods">
+                <div class="payment-method" onclick="selectPayment('card')">
+                    <img src="cardPaylogo.png" alt="Card">
+                    <span>Credit/Debit Card</span>
+                </div>
+                <div class="payment-method" onclick="selectPayment('upi')">
+                    <img src="upiLogo.png" alt="UPI">
+                    <span>UPI</span>
+                </div>
+                <div class="payment-method" onclick="selectPayment('cod')">
+                    <span>Cash on Delivery</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let currentOrder = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrderSummary();
+        });
+
+        async function loadOrderSummary() {
+            try {
+                // Get cart from localStorage
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                
+                if (cart.length === 0) {
+                    window.location.href = 'cart.html';
+                    return;
+                }
+
+                currentOrder = {
+                    items: cart,
+                    subtotal: calculateSubtotal(cart),
+                    shippingCost: 100
+                };
+                currentOrder.total = currentOrder.subtotal + currentOrder.shippingCost;
+
+                displayBill(currentOrder);
+            } catch (error) {
+                console.error('Error loading order summary:', error);
+                alert('Error loading order summary');
+            }
+        }
+
+        function calculateSubtotal(cart) {
+            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        }
+
+        function displayBill(order) {
+            let cartHTML = '<h2>Order Summary</h2>';
+            
+            order.items.forEach(item => {
+                const price = Number(item.price);
+                const itemTotal = price * item.quantity;
+                cartHTML += `
+                    <div class="checkout-item">
+                        <img src="http://localhost:3000${item.image_url}" alt="${item.title}">
+                        <div class="item-details">
+                            <h3>${item.title}</h3>
+                            <p>Price: ₹${price.toFixed(2)} × ${item.quantity}</p>
+                            <p>Total: ₹${itemTotal.toFixed(2)}</p>
+                        </div>
+                    </div>`;
+            });
+
+            cartHTML += `
+                <div class="bill-summary">
+                    <div class="bill-row">
+                        <span>Subtotal:</span>
+                        <span>₹${order.subtotal.toFixed(2)}</span>
+                    </div>
+                    <div class="bill-row">
+                        <span>Shipping Charges:</span>
+                        <span>₹${order.shippingCost.toFixed(2)}</span>
+                    </div>
+                    <div class="bill-row total">
+                        <span>Total:</span>
+                        <span>₹${order.total.toFixed(2)}</span>
+                    </div>
+                </div>`;
+
+            document.getElementById('orderSummary').innerHTML = cartHTML;
+        }
+        function selectPayment(method) {
+            if (!currentOrder) {
+                alert('Please wait for order summary to load');
+                return;
+            }
+            
+            switch(method) {
+                case 'card':
+                    showCardPayment();
+                    break;
+                case 'upi':
+                    showUPIPayment();
+                    break;
+                case 'cod':
+                    showCODConfirmation();
+                    break;
+            }
+        }
+
+        function showPaymentModal(content) {
+            const modal = document.createElement('div');
+            modal.className = 'payment-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    ${content}
+                </div>`;
+            document.body.appendChild(modal);
+        }
+
+        function showCardPayment() {
+            const content = `
+                <h3>Enter Card Details</h3>
+                <form onsubmit="processPayment('card', event)">
+                    <div class="form-group">
+                        <input type="text" placeholder="Card Number" required pattern="[0-9]{16}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/([0-9]{2})">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="CVV" required pattern="[0-9]{3}">
+                    </div>
+                    <button type="submit" class="confirm-btn">Pay Now</button>
+                </form>`;
+            showPaymentModal(content);
+        }
+
+        function showUPIPayment() {
+            const content = `
+                <h3>Enter UPI ID</h3>
+                <form onsubmit="processPayment('upi', event)">
+                    <div class="form-group">
+                        <input type="text" placeholder="UPI ID" required 
+                            pattern="[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}">
+                    </div>
+                    <button type="submit" class="confirm-btn">Pay Now</button>
+                </form>`;
+            showPaymentModal(content);
+        }
+
+        function showCODConfirmation() {
+            const content = `
+                <h3>Cash on Delivery</h3>
+                <form onsubmit="processPayment('cod', event)">
+                    <div class="form-group">
+                        <label>Delivery Address</label>
+                        <textarea id="deliveryAddress" required rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number</label>
+                        <input type="tel" id="contactNumber" required pattern="[0-9]{10}">
+                    </div>
+                    <button type="submit" class="confirm-btn">Confirm Order</button>
+                </form>`;
+            showPaymentModal(content);
+        }
+
+        async function processPayment(method, event) {
+            event.preventDefault();
+            
+            try {
+                const orderData = {
+                    items: currentOrder.items,
+                    totalAmount: currentOrder.total,
+                    paymentMethod: method,
+                    shippingCost: currentOrder.shippingCost
+                };
+
+                if (method === 'cod') {
+                    orderData.deliveryAddress = document.getElementById('deliveryAddress').value;
+                    orderData.contactNumber = document.getElementById('contactNumber').value;
+                }
+
+                console.log('Sending Order Data:', orderData);
+                console.log('Auth Token:', localStorage.getItem('token'));
+
+                const response = await fetch('http://localhost:3000/api/orders/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const data = await response.json();
+                console.log('Order response:', data);
+
+                if (data.success) {
+                    localStorage.removeItem('cart');
+                    alert('Order placed successfully!');
+                    window.location.href = 'index.html';
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Order processing failed:', error);
+                alert(error.message || 'Failed to process order. Please try again.');
+            }
+            }
+
+        function closeModal() {
+            document.querySelector('.payment-modal')?.remove();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('payment-modal')) {
+                closeModal();
+            }
+        };
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>

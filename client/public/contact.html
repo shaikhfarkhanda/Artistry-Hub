@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(8px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 150px auto 50px;
+            padding: 0 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-container h1 {
+            color: rgb(211, 147, 202);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-container p {
+            color: #ddd;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Contact Form */
+        .contactform {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgb(211, 147, 202);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgb(231, 167, 222);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            color: white;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        /* Contact Information */
+        .contact-info {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 40px 0;
+        }
+
+        .contact-info h2 {
+            color: rgb(211, 147, 202);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+        }
+
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: rgb(211, 147, 202);
+        }
+
+        /* Social Media */
+        .social-media {
+            margin-top: 30px;
+        }
+
+        .social-media h3 {
+            color: rgb(211, 147, 202);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links img {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s;
+        }
+
+        .social-links img:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                margin-top: 120px;
+            }
+
+            .contact-container h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options" id="headerOptions">
+
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="contact-container">
+        <h1>Contact Us</h1>
+        <p>If you have any questions, feel free to reach out to us!</p>
+
+        <!-- Contact Form -->
+        <div class="contactform">
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="contact-info">
+            <h2>Our Contact Information</h2>
+            <p>Email: <a href="mailto:contact@artistryhub.com">contact@artistryhub.com</a></p>
+            <p>Phone: +1 (123) 456-7890</p>
+
+            <!-- Social Media -->
+            <div class="social-media">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" target="_blank"><img src="facebook.png" alt="Facebook"></a>
+                    <a href="#" target="_blank"><img src="twitter.png" alt="Twitter"></a>
+                    <a href="#" target="_blank"><img src="insta.png" alt="Instagram"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ArtistryHub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                message: document.getElementById('message').value.trim()
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/contact/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Message sent successfully!');
+                    e.target.reset();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to send message. Please try again.');
+            }
+        });
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>

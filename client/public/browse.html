@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Artworks - ArtistryHub</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg-image {
+            background-image: url("backImg.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            filter: blur(5px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* Search and Filter Styles */
+        .search-filter-section {
+            margin: 120px auto 30px;
+            padding: 25px;
+            max-width: 1000px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .filters input, 
+        .filters select {
+            min-width: 180px;
+            padding: 10px 20px;
+            background: #333;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .filters select {
+            cursor: pointer;
+            appearance: none;
+            padding-right: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='white'%3E%3Cpath d='M0 2l6 6 6-6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+
+        .filters button {
+            padding: 10px 25px;
+            background: #333;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .filters button:hover {
+            background: #444;
+        }
+
+        /* Artwork Gallery */
+        .artwork-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .artwork-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .artwork-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .artwork-info {
+            padding: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .price {
+            color: rgb(211, 147, 202);
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .view-details-btn {
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            color: white;
+            border: 1px solid rgb(211, 147, 202);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .view-details-btn:hover {
+            background: #444;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.95);
+            border-radius: 8px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .modal img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+            }
+
+            .filters input,
+            .filters select,
+            .filters button {
+                width: 100%;
+            }
+
+            .modal {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Content -->
+    <header class="header-nav">
+        <div class="logo-section">
+            <img src="logo.png" alt="ArtistryHub Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-options">
+            <a href="cart.html"><img src="cart.png" class="cartImage"></a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <!-- Filter Section -->
+    <div class="search-filter-section">
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="Search artworks...">
+            <select id="typeFilter">
+                <option value="">All Types</option>
+                <option value="Canvas Painting">Canvas Painting</option>
+                <option value="Water Painting">Water Painting</option>
+                <option value="Knife Painting">Knife Painting</option>
+                <option value="Portrait">Portrait</option>
+            </select>
+            <select id="priceFilter">
+                <option value="">Price Range</option>
+                <option value="0-1000">₹0 - ₹1000</option>
+                <option value="1001-5000">₹1001 - ₹5000</option>
+                <option value="5001-10000">₹5001 - ₹10000</option>
+                <option value="10001+">₹10000+</option>
+            </select>
+            <button onclick="applyFilters()">Apply Filters</button>
+        </div>
+    </div>
+
+    <!-- Artwork Gallery -->
+    <div class="artwork-container" id="artworkContainer"></div>
+
+    <!-- Artwork Modal -->
+    <div id="artworkModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content"></div>
+    </div>
+
+    <footer>
+        <p>© 2024 ArtistryHub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let currentArtwork = null;
+
+        // Load artworks when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchArtworks();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const typeFilter = document.getElementById('typeFilter');
+            const priceFilter = document.getElementById('priceFilter');
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') applyFilters();
+            });
+
+            document.querySelectorAll('.dropdown-content a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetchArtworks(e.target.dataset.type);
+                });
+            });
+        }
+
+        async function fetchArtworks(type = "") {
+            const container = document.getElementById("artworkContainer");
+            container.innerHTML = "<p>Loading artworks...</p>";
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/art/artworks${type ? `?type=${type}` : ''}`);
+                const data = await response.json();
+                
+                // Debug log to see the full artwork data
+                console.log("Artwork data:", data.artworks);
+
+                if (!data.success || !data.artworks?.length) {
+                    container.innerHTML = "<p>No artworks found.</p>";
+                    return;
+                }
+
+                container.innerHTML = data.artworks.map(artwork => {
+                    // Debug log for each artwork's image path
+                    console.log("Image URL for", artwork.title, ":", artwork.image_url);
+                    const price = parseFloat(artwork.price) || 0;
+                    return `
+                        <div class="artwork-card">
+                            <img src="http://localhost:3000${artwork.image_url}" alt="${artwork.title}" class="artwork-image" onerror="this.onerror=null; this.src='placeholder.jpg';">
+                            <div class="artwork-info">
+                                <h3>${artwork.title}</h3>
+                                <p class="price">₹${price.toFixed(2)}</p>
+                                <button class="view-details-btn" onclick="openModal(${artwork.artwork_id})">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error("Error fetching artworks:", error);
+                container.innerHTML = "<p>Error loading artworks.</p>";
+            }
+        }
+
+        async function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const type = document.getElementById('typeFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+
+            let url = 'http://localhost:3000/api/art/artworks?';
+            const params = new URLSearchParams();
+
+            if (searchTerm) params.append('search', searchTerm);
+            if (type) params.append('type', type);
+            if (priceFilter) params.append('priceFilter', priceFilter);
+
+            try {
+                const response = await fetch(url + params);
+                const data = await response.json();
+                
+                const container = document.getElementById("artworkContainer");
+                
+                if (data.success && data.artworks.length > 0) {
+                    container.innerHTML = data.artworks.map(artwork => `
+                        <div class="artwork-card">
+                            <img src="http://localhost:3000${artwork.image_url}" alt="${artwork.title}" class="artwork-image">
+                            <div class="artwork-info">
+                                <h3>${artwork.title}</h3>
+                                <p class="price">₹${artwork.price.toFixed(2)}</p>
+                                <button class="view-details-btn" onclick="openModal(${artwork.artwork_id})">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="color:white;">No artworks found matching your criteria.</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function openModal(artworkId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/art/artworks/${artworkId}`);
+                const data = await response.json();
+                
+                // Debug log to see the modal data
+                console.log("Modal artwork data:", data);
+
+                // Check if we have artwork data in the expected structure
+                if (!data.artwork) {
+                    throw new Error('Artwork data not found');
+                }
+
+                const artwork = data.artwork;
+                currentArtwork = artwork;
+
+                const price = parseFloat(artwork.price) || 0;
+
+                const modal = document.getElementById("artworkModal");
+                modal.querySelector(".modal-content").innerHTML = `
+                    <img src="http://localhost:3000${artwork.image_url}" alt="${artwork.title}" 
+                        onerror="this.onerror=null; this.src='placeholder.jpg';"
+                        style="max-width: 100%; height: auto; margin-bottom: 20px;">
+                    <h2 style="color:white;">${artwork.title}</h2>
+                    <p style="margin: 15px 0; color:white;">${artwork.description || 'No description available'}</p>
+                    <p class="price" style="font-size: 1.2em; margin: 15px 0;">Price: ₹${price.toFixed(2)}</p>
+                    <button class="view-details-btn" onclick="addToCart()">Add to Cart</button>
+                `;
+
+                modal.style.display = "block";
+            } catch (error) {
+                console.error("Error loading artwork details:", error);
+                alert("Error loading artwork details");
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("artworkModal").style.display = "none";
+            currentArtwork = null;
+        }
+
+        function addToCart() {
+            if (!currentArtwork) return;
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const imageUrl = `http://localhost:3000${currentArtwork.image_url}`;
+            
+
+            const existingItem = cart.find(item => item.artwork_id === currentArtwork.artwork_id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    artwork_id: currentArtwork.artwork_id,
+                    title: currentArtwork.title,
+                    price: currentArtwork.price,
+                    image_url: imageUrl,
+                    quantity: 1
+                });
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert('Item added to cart successfully!');
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("artworkModal");
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+/* General Styles */
+body {
+    background-image:url("backImg.jpg");
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-size:cover;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-top:120px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+
+ /*Slideshow container */
+ .slideshow-container{
+    max-width:1000px;
+    position:relative;
+    margin:auto;
+ }
+ /* Hide the images by default */
+ .mySlides{
+    display:none;
+ }
+ /* Next & previous buttons */
+ .prev,.next{
+    cursor:pointer;
+    position:absolute;
+    top:50%;
+    width:auto;
+    margin-top:-22px;
+    padding:16px;
+    color:white;
+    font-weight:bold;
+    font-size:18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+    user-select:none;
+ }
+
+ /* Position the "next button */
+ .next{
+    right:0;
+    border-radius:3px 0 0 3px;
+ }
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,.next:hover{
+    background-color:rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text{
+    color:#f2f2f2;
+    font-size:15px;
+    padding:8px 12px;
+    position:absolute;
+    bottom:8px;
+    width:100px;
+    text-align:center;
+}
+
+/* Number text(1/3 etc) */
+.numbertext{
+    color:#f2f2f2;
+    font-size:12px;
+    padding:8px 12px;
+    position:absolute;
+    top:0;
+}
+
+/* The dots/bullets/indicators */
+.dot{
+    cursor:pointer;
+    height:15px;
+    width:15px;
+    margin:0 2px;
+    background-color:#bbb;
+    border-radius:50%;
+    display:inline-block;
+    transition:background-color 0.6s ease;
+}
+
+.active, .dot:hover{
+    background-color:#717171;
+}
+
+/* Fading animation */
+.fade{
+    animation-name:fade;
+    animation-duration:1.5s;
+}
+
+@keyframes fade{
+    from {opacity: .4}
+    to {opacity:1}
+}
+
+/* Cards */
+/* Featured Artists */
+.featured-artists {
+    color:white;
+    text-align: center;
+    padding: 50px 20px;
+    background-color:transparent;
+}
+
+.featured-artists h2 {
+    margin-bottom: 20px;
+    color: #f1c40f;
+}
+
+.artist-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    background-color: #333;
+    border-radius: 8px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100%;
+    border-radius: 8px;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Featured Artworks */
+.featured-artworks{
+    color:white;
+    text-align:center;
+    padding:40px;
+}
+.artwork-carousel{
+    display:flex;
+    gap:20px;
+    overflow:auto;
+}
+.artwork-card{
+    margin:0px;
+    background-color:#333;
+    flex:1 1 200px;
+    padding:20px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+/* Testimonials */
+.testimonials{
+    color:black;
+    background-color:#e3dfdfb4;
+    padding:4px; 
+    text-align:center;
+} 
+.testimonial-card{
+    font-style:italic;
+    margin-bottom:20px;
+}
+
+/* Events */
+.events{
+    color:white;
+    text-align:center;
+    padding:40px;
+}
+.event-card{
+    background-color:#282525;
+    margin-bottom:20px;
+    padding:10px;
+    border:1px solid #ddd;
+}
+
+/* Artist of the month */
+.artist-of-month{
+    color:black;
+    padding:20px;
+    background-color:#e3dfdfb4;
+    text-align:center;
+}
+.artist-profile img{
+    border-radius:50%;
+    width:150px;
+}
+
+/* Newsletter Signup */
+.newsletter-signup{
+    padding:40px;
+    text-align:center;
+    backhground-color:#333;
+    color:white;
+}
+.newsletter-signup form input, .newsletter-signup form button{
+    padding:10px;
+    margin-top:10px;
+}
+/* Footer */
+footer{
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 20px;
+}
+/* Add these styles to your existing CSS */
+.logout-btn {
+    color: #f4f4f4;
+    padding: 8px 15px;
+    background-color: #555;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #777;
+    cursor: pointer;
+}
+
+.welcome-message {
+    color: #f4f4f4;
+    margin-right: 15px;
+    font-size: 16px;
+}
